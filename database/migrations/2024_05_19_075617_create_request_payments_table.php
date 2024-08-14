@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('request_payments', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('user_id')->nullable()->index();
+            $table->unsignedInteger('receiver_id')->nullable()->index();
+            $table->unsignedInteger('currency_id')->nullable()->index();
+            $table->string('uuid', 13)->nullable()->comment('Unique ID (For Each Payment Request)');
+            $table->decimal('amount', 20, 8)->nullable()->default(0);
+            $table->decimal('accept_amount', 20, 8)->nullable()->default(0);
+            $table->string('email', 191)->nullable();
+            $table->string('phone', 20)->nullable();
+            $table->string('purpose', 191)->nullable();
+            $table->text('note')->nullable();
+            $table->string('status', 11)->comment('Pending, Success, Refund, Blocked');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('request_payments');
+    }
+};
